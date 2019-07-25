@@ -169,7 +169,7 @@ zdf00 = head(zdf0,n=1)
 
 
 for(i in (unique(zdf0$key))) {
-  zdf.sub=zdf1[zdf1$key==i,] %>% tail(n=1)
+  zdf.sub=zdf0[zdf0$key==i,] %>% tail(n=1)
   zdf00 = rbind(zdf00,zdf.sub)
   
 }
@@ -208,7 +208,7 @@ zdf0 = (df.del) %>% dplyr::select(ID,chr,start,bin.num) %>%
 
 zdf00 = head(zdf0,n=1)
 for(i in (unique(zdf0$key))) {
-  zdf.sub=zdf1[zdf1$key==i,] %>% tail(n=1)
+  zdf.sub=zdf0[zdf0$key==i,] %>% tail(n=1)
   zdf00 = rbind(zdf00,zdf.sub)
   
 }

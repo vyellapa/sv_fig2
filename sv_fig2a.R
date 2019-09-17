@@ -371,7 +371,7 @@ q = ggplot(cnv.df,aes(start,n,color=type))+geom_line()+facet_grid(.~order,scales
   scale_fill_manual(values=c("#007B22"))+
   theme(legend.title=element_blank(),plot.margin = unit(c(0,0,0,0.1), "lines"))+
   xlab("")+ylab("Frequency")+
-  coord_cartesian(ylim=c(-40,70)) #+geom_rect(data=hotspots, aes(xmin=start,xmax=stop,ymin=-40,ymax=70))#+geom_point(data=hotspots1,shape=8,color="#303030",size=2)
+  coord_cartesian(ylim=c(-55,78)) #+geom_rect(data=hotspots, aes(xmin=start,xmax=stop,ymin=-40,ymax=70))#+geom_point(data=hotspots1,shape=8,color="#303030",size=2)
 
 ####### Plot Rainfall  ############
 r = ggplot(df.sv.idist,aes(pos1,log10(dist+1), color=factor(X9)))+geom_point(alpha=0.9,size=0.4)+facet_grid(.~order,scales = "free_x",space="free")+ 

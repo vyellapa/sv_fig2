@@ -169,7 +169,7 @@ zdf00 = head(zdf0,n=1)
 
 
 for(i in (unique(zdf0$key))) {
-  zdf.sub=zdf1[zdf1$key==i,] %>% tail(n=1)
+  zdf.sub=zdf0[zdf0$key==i,] %>% tail(n=1)
   zdf00 = rbind(zdf00,zdf.sub)
   
 }
@@ -178,7 +178,7 @@ zdf00 = zdf00[-1,]
 
 
 zdf1 = (df.amp) %>% dplyr::select(ID,chr,end,bin.num) %>% 
-  dplyr::mutate(start=end, stop=end+mb.lim, key=paste0(ID,"_",chr,"_",start)) %>% 
+  dplyr::mutate(start=end, stop=end+mb.lim, key=paste0(ID,"_",chr,"_",start)) %>% dplyr::select(-end) %>% 
   dplyr::arrange(ID,chr,desc(start))
 
 zdf11 = head(zdf1,n=1)
@@ -208,13 +208,13 @@ zdf0 = (df.del) %>% dplyr::select(ID,chr,start,bin.num) %>%
 
 zdf00 = head(zdf0,n=1)
 for(i in (unique(zdf0$key))) {
-  zdf.sub=zdf1[zdf1$key==i,] %>% tail(n=1)
+  zdf.sub=zdf0[zdf0$key==i,] %>% tail(n=1)
   zdf00 = rbind(zdf00,zdf.sub)
   
 }
 zdf00 = zdf00[-1,]
 zdf1 = (df.del) %>% dplyr::select(ID,chr,end,bin.num) %>% 
-  dplyr::mutate(start=end, stop=end+mb.lim, key=paste0(ID,"_",chr,"_",start)) %>% 
+  dplyr::mutate(start=end, stop=end+mb.lim, key=paste0(ID,"_",chr,"_",start)) %>% dplyr::select(-end) %>%
   dplyr::arrange(ID,chr,desc(start))
 
 zdf11 = head(zdf1,n=1)
@@ -304,11 +304,11 @@ hotspots = hotspots %>% dplyr::filter(hotspot_type!="artifact") %>%
   dplyr::select(chr,start.bp,end.bp) %>%
   dplyr::mutate(type=1,t="AMP",order=chr,start.bp=start.bp-50000,end.bp=end.bp+50000) %>%
   dplyr::rename(chrom=chr,start=start.bp,stop=end.bp)
-  
+
 happ = gapp %>% dplyr::mutate(t="AMP",order=chrom)
 hotspots = rbind(happ,hotspots)  
 hotspots$order = factor(hotspots$chrom, levels=c('1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','X'))
-  
+
 ####### Plot Hotspots  ############
 HS = ggplot(hotspots,aes(xmin=start,xmax=stop,ymin=type-1,ymax=type))+geom_rect(aes(fill=factor(t),size=10))+
   facet_grid(.~order,scales = "free_x",space="free", switch ="both")+
@@ -333,25 +333,25 @@ HS = ggplot(hotspots,aes(xmin=start,xmax=stop,ymin=type-1,ymax=type))+geom_rect(
 
 ####### Plot GISTIC  ############
 peaks = ggplot(gistic.plot,aes(xmin=start,xmax=stop,ymin=type-1,ymax=type))+geom_rect(aes(fill=factor(t)))+
-     facet_grid(.~order,scales = "free_x",space="free", switch ="both")+
-     facet_grid(.~order,scales = "free_x",space="free", switch ="both")+ 
-     theme_bw(base_size = 22)+
-     theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), 
-            axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-            legend.position="right", strip.background  = element_blank(), 
-            legend.title=element_blank(), 
-            axis.ticks = element_line(size = 0), 
-            panel.grid.major = element_blank(), 
-            panel.spacing = unit(0.0005, "lines"),
-            panel.border = element_rect(size = 0.5, colour = "#666666", fill = NA),
-            panel.grid.minor.y = element_blank(),
-            panel.grid.major.x = element_blank(),
-           panel.grid.minor.x = element_blank(),
-           #panel.grid.major.x = element_blank(),
-            strip.text.x = element_blank())+ 
-   theme(legend.title=element_blank(), plot.margin = unit(c(0,0,1.75,2.61), "lines"))+
-   scale_fill_manual(values=c("dodgerblue","brown2","#FF5B0C"))+
-   coord_cartesian(ylim=c(0,2))+ylab("GISTIC")
+  facet_grid(.~order,scales = "free_x",space="free", switch ="both")+
+  facet_grid(.~order,scales = "free_x",space="free", switch ="both")+ 
+  theme_bw(base_size = 22)+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), 
+        axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+        legend.position="right", strip.background  = element_blank(), 
+        legend.title=element_blank(), 
+        axis.ticks = element_line(size = 0), 
+        panel.grid.major = element_blank(), 
+        panel.spacing = unit(0.0005, "lines"),
+        panel.border = element_rect(size = 0.5, colour = "#666666", fill = NA),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        #panel.grid.major.x = element_blank(),
+        strip.text.x = element_blank())+ 
+  theme(legend.title=element_blank(), plot.margin = unit(c(0,0,1.75,2.61), "lines"))+
+  scale_fill_manual(values=c("dodgerblue","brown2","#FF5B0C"))+
+  coord_cartesian(ylim=c(0,2))+ylab("GISTIC")
 
 ####### Plot CNV  ############
 hotspots1 = hotspots %>% dplyr::mutate(n=55, type=t)
@@ -399,4 +399,3 @@ r = ggplot(df.sv.idist,aes(pos1,log10(dist+1), color=factor(X9)))+geom_point(alp
 pdf("~/Desktop/SV_fig3a.pdf", width = 20, height = 9, useDingbats=FALSE)
 gridExtra::grid.arrange(r,HS,peaks,q,ncol=1, nrow=4, heights=c(2,0.25,0.55,2), padding = unit(0.0001, "line"))
 dev.off()
-
